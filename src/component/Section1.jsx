@@ -2,7 +2,7 @@ import * as THREE from "three"
 import {useLoader, extend, useFrame} from "@react-three/fiber";
 import {TextureLoader} from "three";
 import React, {useEffect, useMemo, useRef} from "react";
-import {Hud, shaderMaterial, Text} from "@react-three/drei";
+import {Hud, shaderMaterial, Text, useGLTF} from "@react-three/drei";
 import vertexShader from '../shader/dash.vertex.glsl'
 import fragmentShader from '../shader/dash.fragment.glsl'
 import { createNoise3D} from "simplex-noise"
@@ -67,7 +67,7 @@ function Poet() {
 function Rocks() {
     const rocks = useStore((state)=>state.rocks)
     console.log(rocks, "rocks")
-    const vvv = useLoader(GLTFLoader, '/rock.gltf')
+    const vvv = useGLTF('/rock.gltf')
     return   <> {
         rocks.map((data, _) => <Rock {...vvv} key={data.guid} data={data} />)
     }  </>
@@ -110,10 +110,8 @@ function Drones() {
         drones.map((data, i)=><Drone data={data} key={i}/>)
     }</>
 }
-
 function Drone({data}) {
-    const { nodes, materials } = useLoader(GLTFLoader, '/spacedrone.gltf')
-
+    const { nodes, materials } = useGLTF('/spacedrone.gltf')
 
     const ref = useRef()
 

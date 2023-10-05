@@ -1,6 +1,7 @@
 import {useFrame, useLoader} from "@react-three/fiber";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 import {useRef} from "react";
+import {useGLTF} from "@react-three/drei";
 
 
 export default function Section6() {

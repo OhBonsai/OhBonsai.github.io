@@ -1,5 +1,5 @@
 import {Canvas, useFrame} from "@react-three/fiber";
-import {Gltf, OrbitControls, useAnimations} from "@react-three/drei";
+import {Gltf, OrbitControls, useAnimations, useGLTF, useTexture} from "@react-three/drei";
 import {Perf} from "r3f-perf";
 import { useLoader } from '@react-three/fiber'
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -17,6 +17,16 @@ import Section6 from "./component/Section6.jsx";
 import Hud from "./component/Hud.jsx";
 
 
+useGLTF.preload([
+    "/rock.gltf",
+    "/spacedrone.gltf",
+
+])
+useTexture.preload([
+    "/moon1.jpg",
+    "/moon2.jpg",
+    "/earth.jpg",
+])
 
 export default function Portfolio2023() {
 
