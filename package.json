@@ -18,15 +18,24 @@
     "vite-plugin-glsl": "^1.1.2"
   },
   "dependencies": {
-    "gsap": "^3.12.1",
+    "@react-spring/three": "9.3.1",
     "@react-three/drei": "9.77",
     "@react-three/fiber": "8.13",
+    "@react-three/postprocessing": "^2.15.1",
+    "@react-three/rapier": "1.0",
+    "@theatre/core": "0.6.2",
+    "@theatre/r3f": "0.6.2",
+    "@theatre/studio": "0.6.2",
     "@types/three": "0.146.0",
-    "@react-spring/three": "9.3.1",
+    "gsap": "^3.12.1",
     "leva": "0.9.34",
+    "maath": "^0.10.4",
+    "postprocessing": "^6.33.1",
     "r3f-perf": "6.5",
     "react": "^18.2.0",
     "react-dom": "18.2",
-    "three": "^0.153.0"
+    "simplex-noise": "4.0.1",
+    "three": "^0.153.0",
+    "zustand": "4.3"
   }
 }

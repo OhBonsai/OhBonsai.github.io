@@ -10,3 +10,37 @@
 body {
     margin: 0;
 }
+
+
+#next{
+    position: absolute;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-variant-numeric: slashed-zero tabular-nums;
+    line-height: 1em;
+    color: indianred;
+    bottom: 40px;
+    right: 50px;
+    font-size: 2em;
+    transform: skew(5deg, 5deg);
+    pointer-events: all;
+    cursor: pointer;
+    z-index: 999;
+}
+
+
+#pre{
+    position: absolute;
+    text-transform: uppercase;
+    font-weight: 900;
+    font-variant-numeric: slashed-zero tabular-nums;
+    line-height: 1em;
+    color: indianred;
+    bottom: 40px;
+    left: 50px;
+    font-size: 2em;
+    transform: skew(-5deg, -5deg);
+    pointer-events: all;
+    cursor: pointer;
+    z-index: 999;
+}
