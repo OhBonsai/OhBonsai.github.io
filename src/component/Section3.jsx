@@ -174,8 +174,8 @@ export default function Section3(
     })
 
     return <>
-        <Text frustumCulled={false} font={"/cn.ttf"} fontSize={1} position={[0, 7.2, -10]} material={matTest}>少即是多</Text>
-        <Text frustumCulled={false}  font={"/cn.ttf"} fontSize={1 } position={[0, 6, -10]} material={matTest}>慢即是快</Text>
+        <Text frustumCulled={false} font={"/cn0.ttf"} fontSize={1} position={[0, 7.2, -10]} material={matTest}>少即是多</Text>
+        <Text frustumCulled={false}  font={"/cn0.ttf"} fontSize={1 } position={[0, 6, -10]} material={matTest}>慢即是快</Text>
         <Moon  position={[0, 20, -50]}  />
         <CarLights particleCount={particleCount} position={[-options.roadWidth / 2 - options.islandWidth / 2, 0, 0]} />
         <CarLights particleCount={particleCount}

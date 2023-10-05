@@ -204,8 +204,8 @@ export default function Section4() {
                 <Float>
 
                     <group rotation={[0, Math.PI, 0]}>
-                    <Text font={"/cn.ttf"} fontSize={0.1} position={[0, -.6, 0]}>亲爱的旅人，你好 </Text>
-                    <Text font={"/cn.ttf"} ref={ref4} fontSize={0.2} position={[0, -.9, 0]}>我叫盆栽</Text>
+                    <Text font={"/cn0.ttf"} fontSize={0.1} position={[0, -.6, 0]}>朋友，你好 </Text>
+                    <Text font={"/cn0.ttf"} ref={ref4} fontSize={0.2} position={[0, -.9, 0]}>我叫盆栽</Text>
                     </group>
 
                     {/*<Stars*/}

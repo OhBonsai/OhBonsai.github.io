@@ -33,8 +33,8 @@ export default function Section2() {
             <Atom position={[0 , 2,0]}/>
         </Float>
         <group rotation={[0, Math.PI, 0]}>
-            <Text font={"/cn.ttf"} fontSize={.8} position={[0, -3, 0]}>我希望自己 </Text>
-            <Text font={"/cn.ttf"}  fontSize={.8} position={[0, -4.3, 0]}>勇敢，率真，诚恳</Text>
+            <Text font={"/cn0.ttf"} fontSize={.8} position={[0, -3, 0]}>我希望自己 </Text>
+            <Text font={"/cn0.ttf"}  fontSize={.8} position={[0, -4.3, 0]}>勇敢，率真，诚恳</Text>
         </group>
         <Stars radius= {1.0} factor={2.0} saturation={0} count={4000} speed={0.5} />
     </>

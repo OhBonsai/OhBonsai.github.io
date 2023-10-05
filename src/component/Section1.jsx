@@ -57,8 +57,8 @@ function Poet() {
     })
 
     return      <>
-        <Text frustumCulled={false} font={"/cn.ttf"} fontSize={.8} position={[0, 6, -10]} material={matTest}>勤学不怠</Text>
-        <Text frustumCulled={false} font={"/cn.ttf"} fontSize={.8} position={[0, 5, -10]} material={matTest}>刚猛精进</Text>
+        <Text frustumCulled={false} font={"/cn0.ttf"} fontSize={.8} position={[0, 6, -10]} material={matTest}>勤学不怠</Text>
+        <Text frustumCulled={false} font={"/cn0.ttf"} fontSize={.8} position={[0, 5, -10]} material={matTest}>刚猛精进</Text>
     </>
 
 
