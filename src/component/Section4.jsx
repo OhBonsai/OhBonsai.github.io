@@ -1,9 +1,11 @@
 import * as THREE from 'three'
 import { extend } from '@react-three/fiber'
-import {Cloud, Float, shaderMaterial, Sparkles, Stars, Text} from '@react-three/drei'
-import React, { useRef } from 'react'
+import {Cloud, Float, shaderMaterial, Sparkles, Stars, Text, useTexture} from '@react-three/drei'
+import React, {useRef, useState} from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { easing } from 'maath'
+import CONSTANT from "../constant.js";
+import { random } from "maath"
 
 // Tutorial: https://www.youtube.com/watch?v=f4s1h2YETNY
 const WaveMaterial = shaderMaterial(
@@ -174,22 +176,27 @@ export default function Section4() {
         camera.lookAt(new THREE.Vector3(0, 0, 0))
         camera.updateProjectionMatrix()
     })
+    const light = useRef()
+    const [flash] = useState(() => new random.FlashGen({ count: 10, minDuration: 40, maxDuration: 200 }))
+
+
+    const {
+        size,
+        viewport
+    } = useThree()
 
     useFrame((state, delta) => {
         ref2.current.material.time += delta
         ref2.current.quaternion.copy(state.camera.quaternion)
-        // ref3.current.quaternion.copy(state.camera.quaternion)
-        // ref3.current.rotation.x += delta;
-        // console.log(state.camera.position)
 
+        // console.log(state.camera.position)
+        const impulse = flash.update(state.clock.elapsedTime, delta)
+        light.current.intensity = impulse * 15000
         // easing.damp3(ref.current.pointer, state.pointer, 0.2, delta)
     })
     return (
         <>
-            {/*<mesh  ref={ ref3} position={[0,0, -2]}>*/}
-            {/*    <planeGeometry args={[10, 10]} />*/}
-            {/*    <waveMaterial ref={ref} key={WaveMaterial.key} resolution={[size.width * viewport.dpr, size.height * viewport.dpr]} />*/}
-            {/*</mesh>*/}
+
             <mesh  ref={ref2} rotation={[0 , 0 , 0]} position={[0, 0.6, 0]}>
                 <planeGeometry args={[1, 1]}/>
                 <heartMaterial/>
@@ -199,13 +206,25 @@ export default function Section4() {
             {/*    <sphereGeometry args={[.3, 64]}/>*/}
             {/*    <meshBasicMaterial color={"red"}/>*/}
             {/*</mesh>*/}
+            <Cloud
+                position={[0, 0, 15]}
+                seed={2}
+                fade={1}
+                speed={0.3}
+                texture={CONSTANT.ROOT_URL + "/cloud.png"}
+                growth={10}
+                segments={20}
+                volume={1}
+                depthTest={false}
+                opacity={0.6} bounds={[2, 2, 1]} />
+            <pointLight position={[0, 0, 0.5]} ref={light} color="blue" />
 
 
                 <Float>
 
                     <group rotation={[0, Math.PI, 0]}>
-                    <Text font={"/cn0.ttf"} fontSize={0.1} position={[0, -.6, 0]}>朋友，你好 </Text>
-                    <Text font={"/cn0.ttf"} ref={ref4} fontSize={0.2} position={[0, -.9, 0]}>我叫盆栽</Text>
+                    <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={0.1} position={[0, -.6, 0]}>朋友，你好 </Text>
+                    <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} ref={ref4} fontSize={0.2} position={[0, -.9, 0]}>我叫盆栽</Text>
                     </group>
 
                     {/*<Stars*/}

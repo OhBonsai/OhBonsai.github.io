@@ -6,6 +6,7 @@ import fragmentShader from '../shader/infinite.fragment.glsl'
 import * as tools from "../tool.js";
 import React, {useMemo, useRef} from "react";
 import {TextureLoader} from "three";
+import CONSTANT from "../constant.js";
 
 
 const options = {
@@ -174,8 +175,8 @@ export default function Section3(
     })
 
     return <>
-        <Text frustumCulled={false} font={"/cn0.ttf"} fontSize={1} position={[0, 7.2, -10]} material={matTest}>少即是多</Text>
-        <Text frustumCulled={false}  font={"/cn0.ttf"} fontSize={1 } position={[0, 6, -10]} material={matTest}>慢即是快</Text>
+        <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1} position={[0, 7.2, -10]} material={matTest}>少即是多</Text>
+        <Text frustumCulled={false}  font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1 } position={[0, 6, -10]} material={matTest}>慢即是快</Text>
         <Moon  position={[0, 20, -50]}  />
         <CarLights particleCount={particleCount} position={[-options.roadWidth / 2 - options.islandWidth / 2, 0, 0]} />
         <CarLights particleCount={particleCount}
@@ -324,8 +325,8 @@ extend({MoonMaterial})
 export function Moon({move=false, ...props}) {
 
     const [image] = useLoader(THREE.TextureLoader, [
-        "/moon1.jpg"
-        // "/earth.jpg"
+        CONSTANT.ROOT_URL +"/moon1.jpg"
+        // CONSTANT.ROOT_URL +"/earth.jpg"
     ]);
 
 

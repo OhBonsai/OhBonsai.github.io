@@ -29,16 +29,16 @@ export const options = {
     isBloom: false,
     bloomIntensity: 0.3,
     bloomLuminanceThreshold: 0.6,
-    currentPage: 0,
+    currentPage: 5,
+    orbitControl: true,
+
 }
+export const TOTAL = 6
 
 
 export const useStore = create(()=>{return {
     ...options,
     speed: 1,
-
-
-
     t: 0,
     spline,
     track,
@@ -66,15 +66,25 @@ export const setPage = (currentPage)=> useStore.setState((state)=>({currentPage}
 
 export const nextPage = (v)=> useStore.setState((state)=>{
     let oldV = state.currentPage;
-    let newV = oldV + v
-    if (newV < 0) {
-        newV += 5
+    let  newV = v % TOTAL
+
+    if (v < 0) {
+        if (v === PAGE_ACTION.NEXT) {
+            newV = oldV + 1
+        } else if ( v=== PAGE_ACTION.PRE) {
+            newV = oldV - 1
+        }
     }
 
-    newV = newV % 5
+    if (newV < 0) {
+        newV = newV + TOTAL
+    }
+
+    newV = newV % TOTAL
 
     let data = {
-        currentPage: newV
+        currentPage: newV,
+        orbitControl: true,
     }
 
     switch (newV) {
@@ -99,6 +109,11 @@ export const nextPage = (v)=> useStore.setState((state)=>{
         case 4:
             data.isBloom = false
             break;
+        case 6:
+            data.isBloom = true
+            data.bloomIntensity =0.6
+            data.bloomLuminanceThreshold= 0.6
+            break;
     }
 
     return data
@@ -121,3 +136,27 @@ function randomRings(count, track) {
     }
     return temp
 }
+export const PAGE_ACTION = {
+    NEXT: -1,
+    PRE: -2,
+}
+export const toggleOrbitControl = () => useStore.setState(({orbitControl})=>({orbitControl: !orbitControl}))
+
+document.addEventListener("keydown", (event) => {
+    console.log(event)
+    let keyCode = event.which;
+
+    switch (keyCode) {
+        case 65: //a
+            nextPage(PAGE_ACTION.PRE)
+            break
+        case 68: // d
+            nextPage(PAGE_ACTION.NEXT)
+            break
+        case 32:
+            toggleOrbitControl()
+            break
+    }
+    console.log(keyCode)
+}, false);
+

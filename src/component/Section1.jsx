@@ -10,6 +10,8 @@ import {create} from "zustand";
 import {useControls} from "leva";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as CurveExtras from 'three/examples/jsm/curves/CurveExtras'
+import CONSTANT from "../constant.js";
+
 import {useStore} from "../stores.jsx";
 let guid = 1
 
@@ -57,8 +59,8 @@ function Poet() {
     })
 
     return      <>
-        <Text frustumCulled={false} font={"/cn0.ttf"} fontSize={.8} position={[0, 6, -10]} material={matTest}>勤学不怠</Text>
-        <Text frustumCulled={false} font={"/cn0.ttf"} fontSize={.8} position={[0, 5, -10]} material={matTest}>刚猛精进</Text>
+        <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 6, -10]} material={matTest}>勤学不怠</Text>
+        <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 5, -10]} material={matTest}>刚猛精进</Text>
     </>
 
 
@@ -67,7 +69,7 @@ function Poet() {
 function Rocks() {
     const rocks = useStore((state)=>state.rocks)
     console.log(rocks, "rocks")
-    const vvv = useGLTF('/rock.gltf')
+    const vvv = useGLTF(CONSTANT.ROOT_URL + "/rock.gltf")
     return   <> {
         rocks.map((data, _) => <Rock {...vvv} key={data.guid} data={data} />)
     }  </>
@@ -111,7 +113,7 @@ function Drones() {
     }</>
 }
 function Drone({data}) {
-    const { nodes, materials } = useGLTF('/spacedrone.gltf')
+    const { nodes, materials } = useGLTF(CONSTANT.ROOT_URL +"/spacedrone.gltf")
 
     const ref = useRef()
 
@@ -132,7 +134,7 @@ function Drone({data}) {
 
 function Planets() {
     const ref = useRef()
-    const [texture, moon] = useLoader(THREE.TextureLoader, ["/earth.jpg", "/moon2.jpg"])
+    const [texture, moon] = useLoader(THREE.TextureLoader, [CONSTANT.ROOT_URL +"/earth.jpg", CONSTANT.ROOT_URL +"/moon2.jpg"])
     return (
         <group ref={ref} scale={[100, 100, 100]} position={[-500, -500, 1000]}>
             <mesh>

@@ -1,5 +1,5 @@
 import {Canvas, useFrame} from "@react-three/fiber";
-import {Gltf, OrbitControls, useAnimations, useGLTF, useTexture} from "@react-three/drei";
+import {Gltf, OrbitControls, useAnimations, useFont, useGLTF, useTexture} from "@react-three/drei";
 import {Perf} from "r3f-perf";
 import { useLoader } from '@react-three/fiber'
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -14,18 +14,24 @@ import Section4 from "./component/Section4.jsx";
 import Section3 from "./component/Section3.jsx";
 import Section5 from "./component/Section5.jsx";
 import Section6 from "./component/Section6.jsx";
+import {Loader} from '@react-three/drei'
 import Hud from "./component/Hud.jsx";
+import CONSTANT from "./constant.js";
+import Section7 from "./component/Section7.jsx";
 
 
+
+useFont.preload([
+    CONSTANT.ROOT_URL + "/cn0.ttf"
+])
 useGLTF.preload([
-    "/rock.gltf",
-    "/spacedrone.gltf",
-
+    CONSTANT.ROOT_URL +"/rock.gltf",
+    CONSTANT.ROOT_URL +"/spacedrone.gltf",
 ])
 useTexture.preload([
-    "/moon1.jpg",
-    "/moon2.jpg",
-    "/earth.jpg",
+    CONSTANT.ROOT_URL +"/moon1.jpg",
+    CONSTANT.ROOT_URL +"/moon2.jpg",
+    CONSTANT.ROOT_URL +"/earth.jpg",
 ])
 
 export default function Portfolio2023() {
@@ -33,6 +39,7 @@ export default function Portfolio2023() {
     const {
         isBloom,
         currentPage,
+        orbitControl,
         bloomIntensity,
         bloomLuminanceThreshold,
     } = useStore()
@@ -52,6 +59,7 @@ export default function Portfolio2023() {
 
 
     return <>
+        <Loader/>
         <Hud/>
         <Canvas dpr={[1, 2]} camera={{
             position: [0, 0, -5],
@@ -60,9 +68,9 @@ export default function Portfolio2023() {
             far: 10000
         }}>
 
-            {/*<Perf position={"top-left"}/>*/}
+            <Perf position={"top-left"}/>
             <color attach="background" args={['black']}/>
-            {/*<OrbitControls/>*/}
+            {orbitControl ? <OrbitControls/> : null}
             <ambientLight/>
             <directionalLight/>
 
@@ -71,6 +79,7 @@ export default function Portfolio2023() {
             {currentPage === 2 ? <Section1/> : null}
             {currentPage === 3 ? <Section3/> : null}
             {currentPage === 4 ? <Section5/> : null}
+            {currentPage === 5 ? <Section7/> : null}
 
             {/*{*/}
 
@@ -87,7 +96,6 @@ export default function Portfolio2023() {
                     <EffectComposer>
                         <Bloom mipmapBlur resolutionScale = {1} luminanceThreshold={bloomLuminanceThreshold} intensity={bloomIntensity}  radius={0.7}/>
                         <SMAA/>
-                        {/*<Glitch/>*/}
                     </EffectComposer> : null
             }
 

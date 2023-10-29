@@ -5,6 +5,7 @@ import {gsap} from "gsap";
 import {Hud, Sky, Stars, Text} from "@react-three/drei";
 import {useFrame, useLoader, useThree} from "@react-three/fiber";
 import {Moon} from "./Section3.jsx"
+import CONSTANT from "../constant.js";
 
 
 
@@ -37,8 +38,8 @@ export default function Section5() {
     return <>
         <Flower rotation={[0, 0, 0]} position={[0, -13, 40]}/>
         <Hud>
-            <Text font={"/cn0.ttf"} rotation={[0, Math.PI , 0]} fontSize={1.4} position={[0, 12, 0]}>且听风吟</Text>
-            <Text font={"/cn0.ttf"} rotation={[0, Math.PI , 0]} fontSize={1.4} position={[0, 10.5, 0]}>静待花开</Text>
+            <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI , 0]} fontSize={1.4} position={[0, 12, 0]}>且听风吟</Text>
+            <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI , 0]} fontSize={1.4} position={[0, 10.5, 0]}>静待花开</Text>
         </Hud>
 
 
