@@ -72,7 +72,7 @@ export default function AboutMe() {
                             <img src={CONSTANT.ROOT_URL + "/qrcode.jpg"} width={50} height={50}/>
                         </div>
                         <div className={"right"}>
-                            <p>XiaoHongShu: 9892291977</p>
+                            <p>小红书: 9892291977</p>
                             <img src={CONSTANT.ROOT_URL  + "/qrcode2.jpg"} width={50} height={50}/>
                         </div>
                     </div>

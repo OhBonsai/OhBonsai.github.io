@@ -11,26 +11,28 @@ body {
     margin: 0;
 }
 
-.page-base {
+.next-container {
     position: absolute;
-    text-transform: uppercase;
-    font-weight: 200;
-    font-variant-numeric: slashed-zero tabular-nums;
-    line-height: 1em;
-    color: #f49606;
-    font-size: 1.5em;
-    pointer-events: all;
+    width: 30px;
+    height: 30px;
+    left: 50%;
+    bottom: 15px;
     cursor: pointer;
-    z-index: 999;
+    border: none;
 }
 
+
+.next-icon path {
+    fill: #c7d2ca;
+}
+
+
 #about{
-    max-width: 600px;
     position: absolute;
     /*text-transform: uppercase;*/
     font-weight: 200;
     font-variant-numeric: slashed-zero tabular-nums;
-    line-height: 1.5em;
+    line-height: 1.4em;
     color: #f49606;
     font-size: 1em;
     pointer-events: all;

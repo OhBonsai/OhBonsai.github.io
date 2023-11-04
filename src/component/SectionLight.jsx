@@ -194,8 +194,8 @@ export default function SectionLight(
                 <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1} position={[0, 5, -10]} material={matTest}>勤学不怠</Text>
                 <Text frustumCulled={false}  font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1 } position={[0, 3.8, -10]} material={matTest}>刚猛精进</Text>
             </> : <>
-                <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={1} position={[0, 5, -10]} material={matTest}>Keep Learning</Text>
-                <Text frustumCulled={false}  font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={1 } position={[0, 3.8, -10]} material={matTest}>With constant practice diligent</Text>
+                <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={.8} position={[0, 5, -10]} material={matTest}>Keep Learning</Text>
+                <Text frustumCulled={false}  font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={.7 } position={[0, 3.8, -10]} material={matTest}>With constant practice diligent</Text>
             </>
         }
         <CarLights particleCount={particleCount} position={[-options.roadWidth / 2 - options.islandWidth / 2, 0, 0]} />

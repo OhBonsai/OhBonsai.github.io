@@ -40,7 +40,7 @@ export const useStore = create(()=>{return {
     pageOut: false,
     pageIn: false,
     enableScroll: true,
-    isZh: true,
+    isZh: false,
 
     currentPage: 0,
 

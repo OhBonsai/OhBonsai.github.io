@@ -134,7 +134,6 @@ export function Sections() {
 
         </ScrollControls>
 
-
         {
 
             isBloom ?

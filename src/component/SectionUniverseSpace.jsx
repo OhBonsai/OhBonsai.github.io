@@ -79,7 +79,7 @@ function Poet() {
             <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 5.5, -10]} material={matTest}>道阻且长</Text>
             <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 4.5, -10]} material={matTest}>行则将至</Text>
         </> : <>
-            <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={.8} position={[0, 5.5, -10]} material={matTest}>break afflictions and evil</Text>
+            <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={.6} position={[0, 5.5, -10]} material={matTest}>break afflictions and evil</Text>
             <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={.8} position={[0, 4.5, -10]} material={matTest}>no pain, no gain</Text>
         </>
     }

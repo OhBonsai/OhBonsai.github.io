@@ -13,7 +13,7 @@ import {useStore} from "../stores.jsx";
 
 export default function SectionTree() {
 
-    const fontSize = 0.3
+    const fontSize = 0.2
     const isZh = useStore((state)=>{return state.isZh})
 
     return <>
@@ -24,8 +24,8 @@ export default function SectionTree() {
                <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.25, 3.0]}>各美其美</Text>
                <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.55, 3.0]}>美人之美</Text>
            </> : <>
-               <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.25, 3.0]}>Appreciate the values of others</Text>
-               <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.55, 3.0]}>as do to mine</Text>
+               <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.25, 3.0]}>Appreciate the values of</Text>
+               <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.55, 3.0]}>others as do to mine</Text>
            </>
        }
 
