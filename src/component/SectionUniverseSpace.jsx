@@ -2,7 +2,7 @@ import * as THREE from "three"
 import {useLoader, extend, useFrame} from "@react-three/fiber";
 import {TextureLoader} from "three";
 import React, {useEffect, useMemo, useRef} from "react";
-import {Hud, shaderMaterial, Text, useGLTF} from "@react-three/drei";
+import {Hud, shaderMaterial, Text, useGLTF, useScroll} from "@react-three/drei";
 import vertexShader from '../shader/dash.vertex.glsl'
 import fragmentShader from '../shader/dash.fragment.glsl'
 import { createNoise3D} from "simplex-noise"
@@ -12,10 +12,23 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
 import * as CurveExtras from 'three/examples/jsm/curves/CurveExtras'
 import CONSTANT from "../constant.js";
 
-import {useStore} from "../stores.jsx";
+import {nextPage, PAGE_ACTION, TOTAL, useStore} from "../stores.jsx";
 let guid = 1
 
-export default function Section1() {
+export default function SectionUniverseSpace() {
+
+    const curPage = 3
+    const startingOut  = .5
+
+    const scroll = useScroll()
+    useFrame(()=>{
+        const v = scroll.range(curPage/TOTAL + startingOut * (1 / TOTAL), (1-startingOut) * 1/TOTAL)
+        if (v >= 1) {
+            nextPage(PAGE_ACTION.NEXT)
+        }
+
+    })
+
     return <>
         <Rig/>
         {/*<Track/>*/}
@@ -29,6 +42,8 @@ export default function Section1() {
 }
 
 function Poet() {
+    const isZh = useStore((state)=>{return state.isZh})
+
     const matTest = new THREE.ShaderMaterial({
         vertexShader: `    precision mediump float;
  
@@ -59,8 +74,15 @@ function Poet() {
     })
 
     return      <>
-        <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 6, -10]} material={matTest}>勤学不怠</Text>
-        <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 5, -10]} material={matTest}>刚猛精进</Text>
+    {
+        isZh ? <>
+            <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 5.5, -10]} material={matTest}>道阻且长</Text>
+            <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={.8} position={[0, 4.5, -10]} material={matTest}>行则将至</Text>
+        </> : <>
+            <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={.8} position={[0, 5.5, -10]} material={matTest}>break afflictions and evil</Text>
+            <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={.8} position={[0, 4.5, -10]} material={matTest}>no pain, no gain</Text>
+        </>
+    }
     </>
 
 

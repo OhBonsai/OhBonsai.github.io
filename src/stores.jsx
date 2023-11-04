@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import * as CurveExtras from "three/examples/jsm/curves/CurveExtras.js";
 import * as THREE from "three";
+import {useThree} from "@react-three/fiber";
 
 let spline = new THREE.LineCurve3(
   new THREE.Vector3(-50, 0, 0)  ,
@@ -29,14 +30,21 @@ export const options = {
     isBloom: false,
     bloomIntensity: 0.3,
     bloomLuminanceThreshold: 0.6,
-    currentPage: 5,
-    orbitControl: true,
+    orbitControl: false,
 
 }
-export const TOTAL = 6
+export const TOTAL = 7
 
 
 export const useStore = create(()=>{return {
+    pageOut: false,
+    pageIn: false,
+    enableScroll: true,
+    isZh: true,
+
+    currentPage: 0,
+
+
     ...options,
     speed: 1,
     t: 0,
@@ -61,8 +69,11 @@ export const addSpeed = (speed) => useStore.setState((state)=>{
     }
 })
 
+
 export const setBloom = (isBloom)=> useStore.setState(()=>({isBloom}))
+export const setPageOut = (pageOut)=> useStore.setState(()=>({pageOut}))
 export const setPage = (currentPage)=> useStore.setState((state)=>({currentPage}))
+export const setEnableScroll = (enableScroll)=> useStore.setState((state)=>({enableScroll}))
 
 export const nextPage = (v)=> useStore.setState((state)=>{
     let oldV = state.currentPage;
@@ -84,8 +95,9 @@ export const nextPage = (v)=> useStore.setState((state)=>{
 
     let data = {
         currentPage: newV,
-        orbitControl: true,
+        orbitControl: false,
     }
+
 
     switch (newV) {
         case 0:
@@ -109,9 +121,9 @@ export const nextPage = (v)=> useStore.setState((state)=>{
         case 4:
             data.isBloom = false
             break;
-        case 6:
+        case 5:
             data.isBloom = true
-            data.bloomIntensity =0.6
+            data.bloomIntensity =.6
             data.bloomLuminanceThreshold= 0.6
             break;
     }
@@ -140,8 +152,13 @@ export const PAGE_ACTION = {
     NEXT: -1,
     PRE: -2,
 }
-export const toggleOrbitControl = () => useStore.setState(({orbitControl})=>({orbitControl: !orbitControl}))
+export const toggleOrbitControl = () => useStore.setState(({orbitControl})=>{
+    return {orbitControl: !orbitControl}
+})
 
+export const toggleLang = () => useStore.setState(({isZh})=>{
+    return {isZh: !isZh}
+})
 document.addEventListener("keydown", (event) => {
     console.log(event)
     let keyCode = event.which;

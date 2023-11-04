@@ -1,12 +1,13 @@
 import * as THREE from "three"
 import {useFrame, extend, useLoader, useThree} from "@react-three/fiber";
-import {shaderMaterial, Stars, Text} from "@react-three/drei";
+import {shaderMaterial, Stars, Text, useScroll} from "@react-three/drei";
 import vertexShader from '../shader/infinite.vertex.glsl'
 import fragmentShader from '../shader/infinite.fragment.glsl'
 import * as tools from "../tool.js";
 import React, {useMemo, useRef} from "react";
 import {TextureLoader} from "three";
 import CONSTANT from "../constant.js";
+import {nextPage, PAGE_ACTION, TOTAL, useStore} from "../stores.jsx";
 
 
 const options = {
@@ -106,7 +107,7 @@ function getDistortion(time, progress, uFreq, uAmp) {
 }
 
 
-export default function Section3(
+export default function SectionLight(
     {
         particleCount=200,
     }
@@ -117,6 +118,18 @@ export default function Section3(
         camera.updateProjectionMatrix()
     })
 
+    const curPage = 2
+    const startingOut  = .5
+
+    const scroll = useScroll()
+    useFrame(()=>{
+        const v = scroll.range(curPage/TOTAL + startingOut * (1 / TOTAL), (1-startingOut) * 1/TOTAL)
+        if (v >= 1) {
+            nextPage(PAGE_ACTION.NEXT)
+        }
+
+    })
+    const isZh = useStore((state)=>{return state.isZh})
 
     useFrame(({camera, clock}, delta)=>{
 
@@ -131,7 +144,7 @@ export default function Section3(
         let uFreq =new THREE.Vector3(3, 6, 10)
         let uAmp = new THREE.Vector3(30, 30, 20)
 
-       let  distortion =  getDistortion(time, progress, uFreq, uAmp)
+        let  distortion =  getDistortion(time, progress, uFreq, uAmp)
         const lookAt =         new THREE.Vector3(
             camera.position.x + distortion.x,
             camera.position.y + distortion.y,
@@ -175,9 +188,16 @@ export default function Section3(
     })
 
     return <>
-        <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1} position={[0, 7.2, -10]} material={matTest}>少即是多</Text>
-        <Text frustumCulled={false}  font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1 } position={[0, 6, -10]} material={matTest}>慢即是快</Text>
-        <Moon  position={[0, 20, -50]}  />
+        <Moon  position={[0, 35, -50]}  />
+        {
+            isZh ? <>
+                <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1} position={[0, 5, -10]} material={matTest}>勤学不怠</Text>
+                <Text frustumCulled={false}  font={CONSTANT.ROOT_URL + "/cn0.ttf"} fontSize={1 } position={[0, 3.8, -10]} material={matTest}>刚猛精进</Text>
+            </> : <>
+                <Text frustumCulled={false} font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={1} position={[0, 5, -10]} material={matTest}>Keep Learning</Text>
+                <Text frustumCulled={false}  font={CONSTANT.ROOT_URL + "/en0.ttf"} fontSize={1 } position={[0, 3.8, -10]} material={matTest}>With constant practice diligent</Text>
+            </>
+        }
         <CarLights particleCount={particleCount} position={[-options.roadWidth / 2 - options.islandWidth / 2, 0, 0]} />
         <CarLights particleCount={particleCount}
                    position={[ options.roadWidth / 2 + options.islandWidth / 2, 0, 0]}
@@ -186,7 +206,7 @@ export default function Section3(
 }
 
 
- function  CarLights(
+function  CarLights(
     {
         particleCount=50,
         speedRange= [60, 80],
@@ -265,7 +285,6 @@ export default function Section3(
 
 
     useFrame(({clock})=>{
-        // console.log(mesh.material.uniforms)
         meshRef.current.material.uniforms.uTime.value = clock.getElapsedTime()
     })
 
@@ -351,9 +370,9 @@ export function Moon({move=false, ...props}) {
         <pointLight  distance={1000} intensity={100} />
 
         <mesh ref={meshRef}  frustumCulled={false} >
-        <moonMaterial uColor={"white"} ref={materialRef} uTexture={image} />
-        <sphereGeometry args={[5, 40, 16, 16]} />
-    </mesh>
+            <moonMaterial uColor={"white"} ref={materialRef} uTexture={image} />
+            <sphereGeometry args={[5, 40, 16, 16]} />
+        </mesh>
     </group>
 
 }

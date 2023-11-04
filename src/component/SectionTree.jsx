@@ -1,36 +1,89 @@
 import {useFrame, useLoader, useThree} from "@react-three/fiber";
 import {GLTFLoader} from "three/addons/loaders/GLTFLoader.js";
 import {useMemo, useRef} from "react";
-import {Text, useGLTF} from "@react-three/drei";
+import {Hud, Text, useGLTF} from "@react-three/drei";
 import CONSTANT from "../constant.js";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js"
 import {MeshSurfaceSampler} from "three/examples/jsm/math/MeshSurfaceSampler.js";
 import * as THREE from "three"
+import {useEffect} from "react";
+import {gsap} from "gsap";
+import {useStore} from "../stores.jsx";
 
 
-export default function Section7() {
+export default function SectionTree() {
 
+    const fontSize = 0.3
+    const isZh = useStore((state)=>{return state.isZh})
 
     return <>
        <Tree/>
         <LeafRain/>
-        {/*<Ground/>*/}
+       {
+           isZh ? <>
+               <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.25, 3.0]}>各美其美</Text>
+               <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.55, 3.0]}>美人之美</Text>
+           </> : <>
+               <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.25, 3.0]}>Appreciate the values of others</Text>
+               <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, Math.PI * -0.02 , 0]} fontSize={fontSize} position={[-.3, -.55, 3.0]}>as do to mine</Text>
+           </>
+       }
+
     </>
 }
 
 function Tree() {
-    // al-ro.github.io
-    // https://github.com/OhBonsai/resume
     let bc = new THREE.Color("#ffaacc");
 
-    const treeObj = useLoader(OBJLoader, 'https://threejs.org/examples/models/obj/tree.obj')
-    useThree(({gl})=>{
-        // gl.setClearColor(bc)
+    const treeObj = useLoader(OBJLoader, CONSTANT.ROOT_URL + "/tree.obj")
+    const {camera, clock} = useThree(({camera, clock}) => {
+        return  {camera, clock}
     })
+
+    window.CCC = camera
+
+    const elapsedTime = clock.getElapsedTime()
+
+
+
+
     let uniformsTree = {
-        time: {value: 0}
+        time: {value: 0},
+        penzaiSize: {value: 0.05},
     };
 
+    useEffect(()=>{
+        camera.position.set(1.27, 4.83, -0.04)
+        camera.quaternion.set(-0.439, 0.55, 0.42, 0.57)
+        camera.updateProjectionMatrix()
+
+        const cameraDistance = 1.5
+        gsap.to(camera.position, {
+            x: -0.34 * cameraDistance,
+            y: 0.8 * cameraDistance,
+            z: 4.2 * cameraDistance,
+            duration: 5,
+        })
+
+        gsap.to(camera.quaternion, {
+            x: 0.057,
+            y: 0.986,
+            z: -1.61,
+            w: -0.035,
+            duration: 5,
+            onUpdate: ()=>{
+                camera.lookAt(0, 1., 0)
+            }
+        })
+
+
+
+        uniformsTree.penzaiSize.value = 0.05;
+        gsap.to(uniformsTree.penzaiSize, {
+            value: 0.30,
+            duration: 3,
+        })
+    })
 
     let mat = new THREE.MeshBasicMaterial({
         color: 0xff2266, wireframe: false, transparent: true, opacity: 0.75});
@@ -57,8 +110,10 @@ function Tree() {
     treePoints.material.onBeforeCompile = shader => {
         //console.log(shader.vertexShader);
         shader.uniforms.time = uniformsTree.time;
+        shader.uniforms.penzaiSize = uniformsTree.penzaiSize;
         shader.vertexShader = `
     uniform float time;
+    uniform float penzaiSize;
 
     attribute float angle;
     attribute float idx;
@@ -74,9 +129,9 @@ function Tree() {
         shader.vertexShader = shader.vertexShader.replace(
             `gl_PointSize = size;`,
             `
-            float halfSize = size * 0.5;
-      float tIdx = idx + time;
-gl_PointSize = size + (sin(tIdx) * cos(tIdx * 2.5) * 0.5 + 0.5) * halfSize * 0.5;`
+            float halfSize = penzaiSize * 0.5;
+      float tIdx = idx + time * 2.0;
+gl_PointSize = penzaiSize + (sin(tIdx) * cos(tIdx * 2.5) * 0.5 + 0.5) * halfSize ;`
         );
 
         shader.fragmentShader = `
@@ -107,7 +162,7 @@ gl_PointSize = size + (sin(tIdx) * cos(tIdx * 2.5) * 0.5 + 0.5) * halfSize * 0.5
     }
 
     treeObj.add(treePoints)
-    treeObj.rotation.y = THREE.MathUtils.DEG2RAD * 20;
+    // treeObj.rotation.y = THREE.MathUtils.DEG2RAD * 20;
     treeObj.scale.setScalar(5);
 
 
@@ -152,29 +207,11 @@ function Ground() {
 
 function LeafRain() {
 
-    const tex2020 = useMemo(()=>{
-        const cnvs = document.createElement("canvas");
-        cnvs.width = 128;
-        cnvs.height = 64;
-        const ctx = cnvs.getContext("2d");
-
-        ctx.fillStyle = "transparent";
-        ctx.fillRect(0, 0, cnvs.width, cnvs.height);
-        ctx.fillStyle = "#f00";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.font = "bold 22px Arial";
-        ctx.fillText(`美美与共`, cnvs.width * 0.5, cnvs.height * 0.25);
-        ctx.fillText(`人美其美`, cnvs.width * 0.5, cnvs.height * 0.75);
-        let tex2020 = new THREE.CanvasTexture(cnvs);
-        return tex2020
-    }, [])
 
 
 
-
-    let r = 4.5; // radius
-    let MAX_POINTS = 15000;
+    let r = 3.5; // radius
+    let MAX_POINTS = 5000;
     let pointsCount = 0;
     let points = []; //3
     let delay = [];  //1
@@ -191,18 +228,19 @@ function LeafRain() {
             delay.push(THREE.MathUtils.randFloat(-10,0));
             let val = THREE.MathUtils.randFloat(1, 2);
             val = Math.random() < 0.25 ? 0 : val;
-            speed.push(Math.PI * val * 0.125, val); // angle, height
+            speed.push(Math.PI * val * 0.35, val); // angle, height
             pointsCount++;
         }
     }
     let uniforms = {
         time: {value: 0},
-        upperLimit: {value: 10},
+        upperLimit: {value: 3.5},
         upperRatio: {value: 1.25},
-        spiralRadius: {value: 1},
-        spiralTurns: {value: 1.},
+        spiralRadius: {value: 0.0},
+        spiralTurns: {value: 2.},
         azimuth: {value: 0.},
-        tex2020: {value: tex2020},
+        percentage: {value: 0.},
+        // tex2020: {value: tex2020},
 
     }
     let pointsGeom = new THREE.BufferGeometry().setFromPoints(points);
@@ -210,7 +248,7 @@ function LeafRain() {
     pointsGeom.setAttribute("delay", new THREE.BufferAttribute(new Float32Array(delay), 1));
     pointsGeom.setAttribute("speed", new THREE.BufferAttribute(new Float32Array(speed), 2));
 
-    let pointsMat = new THREE.PointsMaterial({/*color: 0xffddaa,*/ vertexColors: THREE.VertexColors, size: 0.1});
+    let pointsMat = new THREE.PointsMaterial({/*color: 0xffddaa,*/ vertexColors: THREE.VertexColors, size: 0.1, transparent: true});
     pointsMat.onBeforeCompile = shader => {
 
         shader.uniforms.time = uniforms.time;
@@ -219,6 +257,7 @@ function LeafRain() {
         shader.uniforms.spiralRadius = uniforms.spiralRadius;
         shader.uniforms.spiralTurns = uniforms.spiralTurns;
         shader.uniforms.tex2020 = uniforms.tex2020;
+        shader.uniforms.percentage = uniforms.percentage;
         shader.uniforms.azimuth = uniforms.azimuth;
 
         shader.vertexShader = `
@@ -236,6 +275,19 @@ function LeafRain() {
   varying float vRatio;
   varying vec2 vSpeed;
   varying float vIsEffect;
+
+
+float rand22(vec2 n) { 
+ return fract(sin(dot(n, vec2(12.9898, 4.1414))) * 43758.5453);
+}
+
+
+float noise(vec2 n) {
+ const vec2 d = vec2(0.0, 1.0);
+  vec2 b = floor(n), f = smoothstep(vec2(0.0), vec2(1.0), fract(n));
+ return mix(mix(rand22(b), rand22(b + d.yx), f.x), mix(rand22(b + d.xy), rand22(b + d.yy), f.x), f.y);
+}
+
 
   mat2 rot( float a){
     return mat2(cos(a), -sin(a), sin(a), cos(a));
@@ -280,10 +332,12 @@ function LeafRain() {
     UVTransformed.xz *= rot(azimuth); // following the camera's azimuthal angle    
     vec3 efcUV = (UVTransformed - efcMin) / (efcMax - efcMin);
     
-     float isEffect = texture2D(tex2020, efcUV.xy).r;
+    // float isEffect = texture2D(tex2020, efcUV.xy).r;
     
-    //float isEffect = 1.;
-     isEffect *= (efcUV.z > 0. && efcUV.z < 1.) ? 1. : 0.;
+     float isEffect = noise(position.zy) > 0.6 ? 1. : 0.;
+     isEffect *= (efcUV.y > -0.5) ? 1. : 0.;
+
+     
     vIsEffect = isEffect;
 `
         );
@@ -296,6 +350,7 @@ gl_PointSize = size * ( cond ? 0.75 : ((1. - hRatio) * (smoothstep(0., 0.01, hRa
         );
         shader.fragmentShader = `
   uniform float time;
+  uniform float percentage;
 
   varying float vRatio;
   varying vec2 vSpeed;
@@ -327,19 +382,25 @@ gl_PointSize = size * ( cond ? 0.75 : ((1. - hRatio) * (smoothstep(0., 0.01, hRa
         float d = clamp(uv.x + .5, 0., 1.);
         vec4 diffuseColor = vec4(mix(diffuse, col, pow(d, 2.)), 1.);
         diffuseColor = vec4(mix(diffuseColor.rgb, vec3(0.95, 0, 0.45), vIsEffect), 1.);
+       
 `
         );
-        console.log(shader.fragmentShader);
+        console.log(shader.vertexShader);
+        console.log(THREE.ShaderChunk.color_fragment)
     }
+    const {camera, clock} = useThree(({camera, clock}) => {
+        return  {camera, clock}
+    })
+
+    const elapsedTime = clock.getElapsedTime()
 
     useFrame(({clock, controls})=>{
-        uniforms.time.value = clock.getElapsedTime() * .2;
+        uniforms.time.value = (clock.getElapsedTime() - elapsedTime) * .2;
     })
 
     let p = new THREE.Points(pointsGeom, pointsMat);
     return <>
         <primitive object={p}/>
-        <Text color={"#ff00ff"} position={[0, 0 ,2]}>2023.10 Hello</Text>
     </>
 }
 

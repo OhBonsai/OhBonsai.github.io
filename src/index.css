@@ -14,14 +14,51 @@ body {
 .page-base {
     position: absolute;
     text-transform: uppercase;
-    font-weight: 900;
+    font-weight: 200;
     font-variant-numeric: slashed-zero tabular-nums;
     line-height: 1em;
-    color: indianred;
-    font-size: 2em;
+    color: #f49606;
+    font-size: 1.5em;
     pointer-events: all;
     cursor: pointer;
     z-index: 999;
+}
+
+#about{
+    max-width: 600px;
+    position: absolute;
+    /*text-transform: uppercase;*/
+    font-weight: 200;
+    font-variant-numeric: slashed-zero tabular-nums;
+    line-height: 1.5em;
+    color: #f49606;
+    font-size: 1em;
+    pointer-events: all;
+    cursor: pointer;
+    z-index: 999;
+    text-align: center;
+    top: 3%;
+    left: 8%;
+    width: 80%;
+}
+
+#about a {
+    color: #e5ceab;
+}
+
+#about .qr-container {
+    display: flex;
+}
+
+#about .qr-container .left {
+    flex: 1;
+}
+
+#about .qr-container .right {
+    flex: 1;
+}
+
+#about p {
 }
 
 .pre{
@@ -31,42 +68,125 @@ body {
 }
 
 .next{
-    bottom: 40px;
+    bottom: 10px;
+    right: 30px;
+    /*transform: skew(5deg, 5deg);*/
+
+}
+
+/* The switch - the box around the speaker*/
+/* The switch - the box around the slider */
+.switch {
+    /* Variables */
+    --switch_width: 2em;
+    --switch_height: 1em;
+    --thumb_color: #e8e8e8;
+    --track_color: #e8e8e8;
+    --track_active_color: #888;
+    --outline_color: #000;
+    font-size: 17px;
+    position: absolute;
+    z-index: 99;
     right: 20px;
-    transform: skew(5deg, 5deg);
-
+    top: 20px;
+    display: inline-block;
+    width: var(--switch_width);
+    height: var(--switch_height);
 }
 
 
-
-.ticker {
-    position: absolute;
-    max-height: 4rem;
-    max-width: 4rem;
-    width: 3.5vw;
-    height: 3.5vw;
-    bottom: 2rem;
-    left: 2rem;
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
-.ticker > * {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
+.switch .langtext {
+    z-index: 99;
+    font-size: 8px;
+    font-weight: bolder;
+    color: antiquewhite;
+    margin-top: -5px;
+}
+
+.switch .langtextzh {
+    margin-left: 3px;
+}
+
+.switch .langtexten {
+    margin-left: 15px;
+}
+
+input:checked ~ .langtexten {
+    display: none;
+}
+
+input:checked ~ .langtextzh {
+    display: block;
+}
+
+input ~ .langtextzh {
+    margin-left: 2px;
+    display: none;
+}
+
+input:checked + .check {
+    right: 30px;
+    color: blue;
+}
+
+/* The slider */
+.slider {
+    box-sizing: border-box;
+    border: 2px solid var(--outline_color);
     position: absolute;
+    cursor: pointer;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--track_color);
+    transition: .15s;
+    border-radius: var(--switch_height);
 }
 
-.ticker > div {
-    opacity: 0.2;
-    border: solid 3px black;
+.slider:before {
+    box-sizing: border-box;
+    position: absolute;
+    content: "";
+    height: var(--switch_height);
+    width: var(--switch_height);
+    border: 2px solid var(--outline_color);
+    border-radius: 100%;
+    left: -2px;
+    bottom: -2px;
+    background-color: var(--thumb_color);
+    transform: translateY(-0.2em);
+    box-shadow: 0 0.2em 0 var(--outline_color);
+    transition: .15s;
 }
 
-.ticker > svg {
-    fill: none;
-    stroke: black;
-    stroke-width: 3;
-    stroke-dasharray: 120;
-    stroke-dashoffset: 120;
+input:checked + .slider {
+    background-color: var(--track_active_color);
+}
+
+input:focus-visible + .slider {
+    box-shadow: 0 0 0 2px var(--track_active_color);
+}
+
+/* Raise thumb when hovered */
+input:hover + .slider:before {
+    transform: translateY(-0.3em);
+    box-shadow: 0 0.3em 0 var(--outline_color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(calc(var(--switch_width) - var(--switch_height))) translateY(-0.2em);
+}
+
+/* Raise thumb when hovered & checked */
+input:hover:checked + .slider:before {
+    transform: translateX(calc(var(--switch_width) - var(--switch_height))) translateY(-0.3em);
+    box-shadow: 0 0.3em 0 var(--outline_color);
 }

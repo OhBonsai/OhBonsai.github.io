@@ -1,66 +1,87 @@
-import {Canvas, useFrame} from "@react-three/fiber";
-import {Gltf, OrbitControls, useAnimations, useFont, useGLTF, useTexture} from "@react-three/drei";
-import {Perf} from "r3f-perf";
-import { useLoader } from '@react-three/fiber'
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader.js";
-import {useEffect} from "react";
-import * as THREE from "three"
-import Section1 from "./component/Section1.jsx";
-import {useControls} from "leva";
+import {Canvas, useFrame, useLoader} from "@react-three/fiber";
+import {
+    Gltf,
+    OrbitControls,
+    useAnimations,
+    useFont,
+    useGLTF,
+    useTexture,
+    ScrollControls,
+    Scroll,
+    useScroll, useVideoTexture
+} from "@react-three/drei";
 import {options, setBloom, setPage, useStore} from "./stores.jsx";
 import {Bloom, EffectComposer, Glitch, SMAA} from "@react-three/postprocessing";
-import Section2 from "./component/Section2.jsx";
-import Section4 from "./component/Section4.jsx";
-import Section3 from "./component/Section3.jsx";
-import Section5 from "./component/Section5.jsx";
-import Section6 from "./component/Section6.jsx";
+import SectionHeart from "./component/SectionHeart.jsx";
+import SectionAtom from "./component/SectionAtom.jsx";
+import SectionUniverseSpace from "./component/SectionUniverseSpace.jsx";
+import SectionFlowerVideo from "./component/SectionFlowerVideo.jsx";
+import SectionTree from "./component/SectionTree.jsx";
+import SectionLight from "./component/SectionLight.jsx";
 import {Loader} from '@react-three/drei'
 import Hud from "./component/Hud.jsx";
+import AboutMe from "./component/AboutMe.jsx";
 import CONSTANT from "./constant.js";
-import Section7 from "./component/Section7.jsx";
+import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader.js";
+import LangSwitcher from "./component/LangSwitcher.jsx";
 
 
 
 useFont.preload([
     CONSTANT.ROOT_URL + "/cn0.ttf"
 ])
+
+
 useGLTF.preload([
     CONSTANT.ROOT_URL +"/rock.gltf",
     CONSTANT.ROOT_URL +"/spacedrone.gltf",
 ])
+
+
 useTexture.preload([
     CONSTANT.ROOT_URL +"/moon1.jpg",
     CONSTANT.ROOT_URL +"/moon2.jpg",
     CONSTANT.ROOT_URL +"/earth.jpg",
 ])
 
-export default function Portfolio2023() {
+useGLTF.preload([
+    CONSTANT.ROOT_URL + "/tree.obj"
+])
 
+function initVideo(){
+    const url = "/video-03.mp4"
+    const vid = document.createElement("video");
+    vid.setAttribute("id", "flowerVideo")
+    vid.setAttribute("preload", "auto")
+    vid.src = CONSTANT.ROOT_URL + url
+
+    vid.style.display = "none"
+    vid.crossOrigin = "Anonymous";
+    vid.loop = false;
+    vid.muted = true;
+    document.body.append(vid)
+    return vid;
+}
+
+initVideo()
+
+
+export default function Portfolio2023() {
     const {
         isBloom,
         currentPage,
         orbitControl,
         bloomIntensity,
         bloomLuminanceThreshold,
+
+        pageIn,
+        pageOut,
     } = useStore()
 
 
-    // useControls( {
-    //     bloom: {value: options.isBloom, onChange: (v)=>setBloom(v)},
-    //     currentPage: {value: options.currentPage, min:0, max: 4, step: 1,
-    //         onChange: (v)=>setPage(v)
-    //     }
-    //     // count: {value: 100, min: 5, max: 200, step: 1},
-    //     // luminanceThreshold: {value: 0.3, min: 0.1, max: 1.0, step: 0.01},
-    //     // intensity:{value: 0.7, min: 0.1, max: 1.0, step: 0.01},
-    //     // isBloom: false,
-    //     // particleCount: {value: 100, min: 10, max: 200, step: 10},
-    // })
-
-
     return <>
+        <LangSwitcher/>
         <Loader/>
-        <Hud/>
         <Canvas dpr={[1, 2]} camera={{
             position: [0, 0, -5],
             fov: 90,
@@ -68,43 +89,61 @@ export default function Portfolio2023() {
             far: 10000
         }}>
 
-            <Perf position={"top-left"}/>
+            {/*<Perf position={"top-left"}/>*/}
             <color attach="background" args={['black']}/>
-            {orbitControl ? <OrbitControls/> : null}
+            {/*{orbitControl ? <OrbitControls enableZoom={false}/> : null}*/}
             <ambientLight/>
             <directionalLight/>
 
-            {currentPage === 0 ? <Section4/> : null}
-            {currentPage === 1 ? <Section2/> : null}
-            {currentPage === 2 ? <Section1/> : null}
-            {currentPage === 3 ? <Section3/> : null}
-            {currentPage === 4 ? <Section5/> : null}
-            {currentPage === 5 ? <Section7/> : null}
-
-            {/*{*/}
-
-            {/*        <EffectComposer>*/}
-            {/*            <Bloom mipmapBlur resolutionScale = {1} luminanceThreshold={luminanceThreshold} luminanceSmoothing = {0} radius={intensity}/>*/}
-            {/*            <SMAA/>*/}
-            {/*            /!*<Glitch/>*!/*/}
-            {/*        </EffectComposer>*/}
-            {/*}*/}
-
-            {
-
-                isBloom ?
-                    <EffectComposer>
-                        <Bloom mipmapBlur resolutionScale = {1} luminanceThreshold={bloomLuminanceThreshold} intensity={bloomIntensity}  radius={0.7}/>
-                        <SMAA/>
-                    </EffectComposer> : null
-            }
-
+            <Sections/>
 
 
         </Canvas>
-        {/*<Overlay/>*/}
+        {currentPage === 6 ? <AboutMe/> : null}
+        {currentPage !== 6 ? <Hud/>  : null}
+
     </>;
 
 }
 
-// https://fonts.googleapis.com/css2?family=Zhi+Mang+Xing&text=%E4%BA%B2%E7%88%B1%E7%9A%84%E6%9C%8B%E5%8F%8B%EF%BC%8C%E4%BD%A0%E5%A5%BD%E6%88%91%E5%8F%AB%E7%9B%86%E6%A0%BD%E4%B8%94%E5%90%AC%E9%A3%8E%E5%90%9F%E9%9D%99%E5%BE%85%E8%8A%B1%E5%BC%80%E5%8B%A4%E5%AD%A6%E4%B8%8D%E6%80%A0%E5%88%9A%E7%8C%9B%E7%B2%BE%E8%BF%9B%E6%88%91%E5%B8%8C%E6%9C%9B%E8%87%AA%E5%B7%B1%E5%8B%87%E6%95%A2%EF%BC%8C%E7%8E%87%E7%9C%9F%EF%BC%8C%E8%AF%9A%E6%81%B3%E5%B0%91%E5%8D%B3%E6%98%AF%E5%A4%9A%E6%85%A2%E5%8D%B3%E6%98%AF%E5%BF%AB
+
+export function Sections() {
+
+    const {
+        isBloom,
+        currentPage,
+        orbitControl,
+        bloomIntensity,
+        bloomLuminanceThreshold,
+        enableScroll,
+        pageIn,
+        pageOut,
+    } = useStore()
+
+
+
+    return <>
+        <ScrollControls pages={6} damping={0.25} enabled={false} >
+
+            {currentPage === 0 ? <SectionHeart/> : null}
+            {currentPage === 1 ? <SectionAtom/> : null}
+            {currentPage === 2 ? <SectionLight/> : null}
+            {currentPage === 3 ? <SectionUniverseSpace/> : null}
+            {currentPage === 4 ? <SectionFlowerVideo/> : null}
+            {currentPage === 5 ? <SectionTree/> : null}
+
+        </ScrollControls>
+
+
+        {
+
+            isBloom ?
+                <EffectComposer>
+                    <Bloom mipmapBlur resolutionScale = {1} luminanceThreshold={bloomLuminanceThreshold} intensity={bloomIntensity}  radius={0.7}/>
+                    <SMAA/>
+                </EffectComposer> : null
+        }
+
+    </>
+}
+

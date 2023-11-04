@@ -1,11 +1,9 @@
 
-import {nextPage, useStore} from "../stores.jsx";
-import styles from "../index.css?inline"
+import {nextPage, PAGE_ACTION, useStore} from "../stores.jsx";
+import styles from "../index.css"
 import {useSpring, animated} from "@react-spring/web";
 
 export default function Hud() {
-
-
 
     const {
         currentPage,
@@ -24,11 +22,11 @@ export default function Hud() {
         loop: true,
     });
     return <>
-        <div className={"page-base pre"}  onClick={()=>{nextPage(PAGE_ACTION.PRE)}}>
-            &#8249;
-        </div>
+        {/*<div className={"page-base pre"}  onClick={()=>{nextPage(PAGE_ACTION.PRE)}}>*/}
+        {/*    &#8249;*/}
+        {/*</div>*/}
         <div className={"page-base next"} onClick={()=>{nextPage(PAGE_ACTION.NEXT)}}>
-            &#8250;
+            {currentPage === 5 ? "CONTACT": "NEXT"}
         </div>
         {/*<div className={styles.ticker}>*/}
         {/*    <div />*/}

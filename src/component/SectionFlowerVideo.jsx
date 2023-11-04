@@ -1,26 +1,42 @@
 import * as THREE from "three"
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useControls} from "leva";
 import {gsap} from "gsap";
-import {Hud, Sky, Stars, Text} from "@react-three/drei";
+import {Hud, Sky, Stars, Text, useScroll} from "@react-three/drei";
 import {useFrame, useLoader, useThree} from "@react-three/fiber";
-import {Moon} from "./Section3.jsx"
 import CONSTANT from "../constant.js";
+import {nextPage, PAGE_ACTION, TOTAL, useStore} from "../stores.jsx";
 
 
 
 
-
-export default function Section5() {
-
+export default function SectionFlowerVideo() {
 
 
-    useThree(({camera})=>{
-        camera.position.set(0, 0, -15)
-        camera.lookAt(new THREE.Vector3(0, 0, 0))
-        camera.updateProjectionMatrix()
+
+    const camera = useThree(({camera})=>{
+        return camera
     })
 
+    const curPage = 4
+    const startingOut  = .5
+    const isZh = useStore((state)=>{return state.isZh})
+
+    const scroll = useScroll()
+    useFrame(()=>{
+        const v = scroll.range(curPage/TOTAL + startingOut * (1 / TOTAL), (1-startingOut) * 1/TOTAL)
+        if (v >= 1) {
+            nextPage(PAGE_ACTION.NEXT)
+        }
+
+    })
+
+    useEffect(()=>{
+        camera.position.set(0, 0, 5)
+        camera.quaternion.set(0, 0, 0, 1)
+        camera.lookAt(0, 0, 0)
+        camera.updateProjectionMatrix()
+    })
 
     // const [[v1, v2, v3], _] = useState(()=>{
     //     return ["video-01.mp4", "video-03-simple-infinite.mp4", "video-03.mp4"].map((url, i)=>{
@@ -35,44 +51,28 @@ export default function Section5() {
     // })
 
 
+    const fontSize = .5
+
     return <>
-        <Flower rotation={[0, 0, 0]} position={[0, -13, 40]}/>
+        <Flower rotation={[0, 0, 0]} position={[0, -12, -70]}/>
         <Hud>
-            <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI , 0]} fontSize={1.4} position={[0, 12, 0]}>且听风吟</Text>
-            <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, Math.PI , 0]} fontSize={1.4} position={[0, 10.5, 0]}>静待花开</Text>
+            {
+                isZh ? <>
+                    <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, 0 , 0]} fontSize={fontSize} position={[0, 2.7, 0]}>且听风吟</Text>
+                    <Text font={CONSTANT.ROOT_URL + "/cn0.ttf"} rotation={[0, 0 , 0]} fontSize={fontSize} position={[0, 2.0, 0]}>静待花开</Text>
+                </>  : <>
+                    <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, 0 , 0]} fontSize={fontSize} position={[0, 2.7, 0]}>Less is more</Text>
+                    <Text font={CONSTANT.ROOT_URL + "/en0.ttf"} rotation={[0, 0 , 0]} fontSize={fontSize} position={[0, 2.0, 0]}>Slow is fast</Text>
+                </>
+            }
         </Hud>
 
 
 
-        {/*<mesh rotation={[0, 0, 0]} position={[5, 0, 1.1]}>*/}
-        {/*    <planeGeometry args={[4.8, 8.2]} />*/}
-        {/*    <meshStandardMaterial emissive={"white"} side={THREE.DoubleSide}>*/}
-        {/*        <videoTexture attach="map" args={[v1]} />*/}
-        {/*        <videoTexture attach="emissiveMap" args={[v1]} />*/}
-        {/*    </meshStandardMaterial>*/}
-        {/*</mesh>*/}
     </>
 }
 
-// const [v1, v2, v3] = ["video-01.mp4", "video-03-simple-infinite.mp4", "video-03.mp4"].map((url, i)=>{
-//     const vid = document.createElement("video");
-//     vid.src = url
-//     vid.crossOrigin = "Anonymous";
-//     vid.loop = true;
-//     vid.muted = true;
-//     vid.play()
-//     return vid;
-// })
 
-const [v2] =[ "video-03-simple-infinite.mp4"].map((url, i)=>{
-    const vid = document.createElement("video");
-    vid.src = url
-    vid.crossOrigin = "Anonymous";
-    vid.loop = true;
-    vid.muted = true;
-    vid.play()
-    return vid;
-})
 
 
 function Flower({...props}) {
@@ -80,6 +80,13 @@ function Flower({...props}) {
     const {gl} = useThree()
     const currentRatio = gl.getPixelRatio()
     console.log(currentRatio, "ratio")
+    const flowerVideo = document.getElementById("flowerVideo")
+    flowerVideo.play()
+    flowerVideo.currentTime = 0
+    flowerVideo.pause()
+
+
+
 
     const material = new THREE.ShaderMaterial({
         // dFdx dFdy
@@ -92,8 +99,10 @@ function Flower({...props}) {
         wireframe: true,
         uniforms: {
             uTime: {value: 0},
-            uTexture: {value: new THREE.VideoTexture(v2)},
-            uTexture1: {value: new THREE.VideoTexture(v2)},
+            percentage: {value: 50.},
+            speed: {value: 1.0},
+            uTexture: {value: new THREE.VideoTexture(flowerVideo)},
+            uTexture1: {value: new THREE.VideoTexture(flowerVideo)},
             resolution: {value : new THREE.Vector3()}
         },
         vertexShader: `
@@ -146,13 +155,14 @@ vec3 curl_noise(vec2 p)
 }
 
        uniform float uTime;
-
+        uniform float percentage;
+        uniform float speed;
 varying vec2 vUv;
 
 void main() {
     vUv = uv;
-    vec3 distortion = curl_noise(vec2(position.x + uTime * .1, position.y));
-    vec3 newPosition = position +  distortion * 0.8;
+    vec3 distortion = curl_noise(vec2(position.x + uTime * speed, position.y));
+    vec3 newPosition = position +  distortion * percentage;
     // newPosition.z = newPosition.z * 5.5;
    
     vec4 modelPosition = modelMatrix * vec4(newPosition, 1.);
@@ -187,14 +197,22 @@ void main() {
 `,
     })
 
+    useEffect(()=>{
+        gsap.to(material.uniforms.percentage, {
+            value: 0.0,
+            duration: 3.0,
+            onComplete: ()=>{
+                flowerVideo.play()
+            }
+        })
+    })
+
     useFrame(({clock})=>{
         material.uniforms.uTime.value = clock.getElapsedTime();
-
     })
 
 
     return <>
-
         <points material={material} {...props}>
             <planeGeometry args={[48, 82, 48*5, 82*5]}/>
         </points>

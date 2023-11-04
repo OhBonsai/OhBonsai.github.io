@@ -26,7 +26,7 @@ Thanks for watching
  
 保持好奇，不断学习
 
-少就是多，慢就是快
+道阻且长, 行则将至
 
 且听风吟 静待花开
 
@@ -34,5 +34,14 @@ Thanks for watching
 
 ```
 
+1. animated
+2. music
+3. scroll
 
  reddit dissord youtube twitter 
+
+
+1. 心 粒子， 流动
+2. 地图 wind airflow
+3. https://codepen.io/prisoner849/pen/YzPWGRY
+4. 最后给出自己的而为， 并且放一些烟花， 或者跳舞的人。。
